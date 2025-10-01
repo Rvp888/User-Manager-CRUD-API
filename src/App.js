@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import UserForm from "./components/UserForm";
+import UserList from "./components/UserList";
 
 const API_URL = "https://jsonplaceholder.typicode.com/users";
 
 function App() {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
-  const [formData, setFormData] = useState({ name: "", email: "" });
 
   // Fetch users on load
   // ✅ Method 1: Using Axios with .then()
@@ -118,74 +119,20 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    if (editingUser) {
-      setFormData({ name: editingUser.name, email: editingUser.email });
-    }
-  }, [editingUser]);
-
-  function handleChange(e) {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (!formData.name || !formData.email) return;
-
-    if (editingUser) {
-      updateUser(editingUser.id, formData);
-    } else {
-      addUser(formData);
-    }
-
-    setFormData({ name: "", email: "" });
-  }
-
   return (
     <div style={{ padding: "20px" }}>
       <h1>User Manager</h1>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          style={{ marginLeft: "10px" }}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          style={{ marginLeft: "5px" }}
-        />
-        <button type="submit" style={{ marginLeft: "10px" }}>
-          {editingUser ? "Update" : "Add"} User
-        </button>
-      </form>
-
-      <ul>
-        {users.map((user) => (
-          <li key={user.id} style={{ marginBottom: "10px" }}>
-            {user.name} - {user.email}
-            <button
-              onClick={() => setEditingUser(user)}
-              style={{ marginLeft: "10px" }}
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => deleteUser(user.id)}
-              style={{ marginLeft: "10px" }}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+      <UserForm
+        editingUser={editingUser}
+        addUser={addUser}
+        updateUser={updateUser}
+      />
+      <UserList
+        users={users}
+        setEditingUser={setEditingUser}
+        deleteUser={deleteUser}
+      />
     </div>
   );
 }
