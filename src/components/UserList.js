@@ -5,6 +5,7 @@ function UserList({ users, setEditingUser, deleteUser }) {
     <ul>
       {users.map((user) => (
         <UserItem
+          key={user.id}
           user={user}
           setEditingUser={setEditingUser}
           deleteUser={deleteUser}

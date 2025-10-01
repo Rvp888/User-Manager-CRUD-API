@@ -1,6 +1,6 @@
 function UserItem({ user, setEditingUser, deleteUser }) {
   return (
-    <li key={user.id} style={{ marginBottom: "10px" }}>
+    <li style={{ marginBottom: "10px" }}>
       {user.name} - {user.email}
       <button
         onClick={() => setEditingUser(user)}
